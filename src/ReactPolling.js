@@ -124,6 +124,13 @@ export class ReactPolling extends React.Component {
       */
       fetch(url, api)
         .then(resp => {
+          if (resp.headers.get('Content-Length') === '0') {
+            if (resp.ok) {
+              return resp;
+            } else {
+              return Promise.reject({ status: resp.status, resp });
+            }
+          }
           return resp.json().then(data => {
             if (resp.ok) {
               return data;

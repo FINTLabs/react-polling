@@ -12,6 +12,14 @@ describe('<ReactPolling />', () => {
     beforeAll(() => {
       window.fetch = jest.fn().mockImplementation(() =>
         Promise.resolve({
+          headers: {
+            get: (h) => {
+              if (h === 'Content-Length') {
+                return '1234';
+              }
+              return null;
+            }
+          },
           json: () => {
             return new Promise(resolve => {
               resolve(mockData.continuePollingResponse);
